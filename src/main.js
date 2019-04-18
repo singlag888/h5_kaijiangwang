@@ -1,0 +1,46 @@
+// The Vue build version to load with the `import`  command 
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+import store from './store'
+import { mapGetters } from 'vuex'
+import * as socketApi  from '@/js/sockt'
+
+Vue.config.productionTip = false
+Vue.prototype.socketApi = socketApi
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  store,
+  components: { App },
+  template: '<App/>',
+  created() {
+    // 获取access token
+    store.dispatch('getAccessToken')
+    .then(res => {
+      if(res == 404){
+        //this.$router.push('/page404');
+        console.log('404')
+      }
+    });
+  },
+  computed: {
+    ...mapGetters(['baseSettingData'])
+  },
+  watch: {
+    baseSettingData:function(){
+      this.socketApi.initWebSocket(this.baseSettingData.websocket_client);
+      this.socketApi.sendSock('test',this.getConfigResult);   
+    }
+  },
+  methods: {
+    getConfigResult(result){
+      if(result.code){
+        store.commit('SOCKET_OPEN_RESULT', result)
+      }
+    }
+  }
+})
