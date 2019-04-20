@@ -53,8 +53,8 @@ export default {
                 dom[0].remove();
                 this.$refs.openCode.appendChild(fastTemp);
                 this.setTimeFunc = setTimeout(()=>{
-                clearTimeout(this.setTimeFunc);
-                this.showOpenAni();
+                    clearTimeout(this.setTimeFunc);
+                    this.showOpenAni();
                 },100)
             }else{
                 clearTimeout(this.setTimeFunc);

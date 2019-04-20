@@ -1,6 +1,9 @@
 // loading
 // export const SHOW_LOADING = 'SHOW_LOADING';
 
+// 二级页面选项卡
+export const SHOW_DRAWER_TAB = 'SHOW_DRAWER_TAB';
+
 // 基础配置数据
 export const BASE_SETTING_DATA = 'BASE_SETTING_DATA';
 

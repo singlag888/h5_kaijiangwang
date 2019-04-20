@@ -30,8 +30,8 @@
                 </div>
                 <!-- 龙虎 -->
                 <div class="history-square margin" v-show="activeTab == 'dragon_tiger'">
-                    <p class="square dragon-tiger" v-for="(sum,index) in item.data.first_second_sum" :key="index + 'a'">{{sum}}</p>
-                    <p class="square dragon-tiger" v-for="(num, index) in item.data.dragon_tiger" :key="index + 'b'">{{num}}</p>
+                    <p class="square dragon-tiger" :class="methodsClass(sum)" v-for="(sum,index) in item.data.first_second_sum" :key="index + 'a'">{{sum}}</p>
+                    <p class="square dragon-tiger" :class="num == '虎' ? 'odd' : 'even'" v-for="(num, index) in item.data.dragon_tiger" :key="index + 'b'">{{num}}</p>
                 </div>
             </li>
         </ul>
@@ -55,11 +55,20 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(["lotteryData", "cur_lottery_type"])
+        ...mapGetters(["lotteryData", "cur_lottery_type"]),
     },
     methods: {
         changeTab(name) {
             this.activeTab = name
+        },
+        methodsClass(sum) {
+            if(sum == '单' || sum == '小') {
+                return 'odd'
+            } else if(sum == '双' || sum == '大') {
+                return 'even'
+            } else {
+                return 'number'
+            }
         }
     },
     mounted() {
@@ -109,7 +118,10 @@ export default {
                 .even{
                     background: #ff7300
                 }
-                .dragon-tiger{color: #000;}
+                .number{
+                    color: red;//background: #ffa300
+                }
+                // .dragon-tiger{color: #000;}
             }
         }
     }

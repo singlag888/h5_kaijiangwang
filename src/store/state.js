@@ -2,6 +2,8 @@
 const state = {
     //loading
     // showLoading: false,
+    // 二级页面选项卡
+    showDrawerTba: false,
     //页面公用选项卡
     tabControl: [
         {label: '开奖记录', path: '/second-detail/history'},

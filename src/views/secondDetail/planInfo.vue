@@ -18,9 +18,9 @@
             </p>           
         </div>
         <div class="content">
-            <div class="top">专家: {{this.$route.query.name}} 1天/{{planData.wheel_quantity}}轮 1轮/{{planData.wheel_expect_quantity}}期 </div>
+            <div class="top">专家: {{this.$route.query.name}} 1天/{{planData.wheel_quantity}}轮 1轮/{{planData.wheel_expect_quantity}}期 <span class="refresh" @click="refresh">刷新页面</span></div>
             <ul v-for="(item, index) of planData.expert_forecast_data_list" :key="index">
-                <li class="title">第{{planData.expert_forecast_data_list.length - index}}轮  待开奖 : {{calcOopenNumToTal(item).noOpen}}  中 : {{calcOopenNumToTal(item).noWin}}  胜率 : {{calcOopenNumToTal(item).winPro}}</li>
+                <li class="title">第{{planData.expert_forecast_data_list.length - index}}轮  待开奖:{{calcOopenNumToTal(item).noOpen}}  中:{{calcOopenNumToTal(item).win}}  挂:{{calcOopenNumToTal(item).noWin}}  胜率:{{calcOopenNumToTal(item).winPro}}</li>
                 <li class="item">
                     <p>期</p>
                     <p>轮次</p>
@@ -46,7 +46,7 @@
                         <span style="color: green" v-else-if="obj.forecast_numbers.indexOf(obj.open_number) != -1">中</span>
                         <span style="color: red" v-else>挂</span>
                     </p>
-                    <p>待开</p>
+                    <p>{{obj.deadline_win_or_lose}}</p>
                 </li>
             </ul>
         </div>
@@ -97,24 +97,39 @@ export default {
                 }
             })
         },
+        refresh() {
+            this.getForecastPlanFunc(
+                this.curLotteryCode,
+                this.expertId,
+                getCurTime("YYYY-MM-DD"),
+                this.forecastQuantity,
+                this.location
+            );
+        },
         // 计算开奖统计
         calcOopenNumToTal(item) {
-            let noOpen = 0;
-            let win = 0;
-            let noWin = 0;
-            let winPro = 0;
+            let noOpen = 0; //待开
+            let win = 0; // 赢
+            let noWin = 0; // 挂
+            let winPro = 0; //胜率
             item.forEach(obj => {
                 if (obj.status == 0) {
-                noOpen++;
-                }
-                if (obj.result == 0) {
-                noWin++;
-                }
-                if (obj.result == 1) {
-                win++;
-                }
+                    noOpen++;
+                }else {
+                    if (obj.result == 0) {
+                        noWin++;
+                    }
+                    if (obj.result == 1) {
+                        win++;
+                    }
+                }              
             });
-            winPro = ((win / (item.length - noOpen)) * 100).toFixed(2) + "%";
+            // console.log(win,item.length,noOpen)
+            if(item.length == 1 && noOpen == 1) {
+                winPro = 0 + '%'
+            } else {
+                winPro = ((win / (item.length - noOpen)) * 100).toFixed(2) + "%";
+            }  
             return {
                 noOpen: noOpen,
                 win: win,
@@ -194,6 +209,7 @@ export default {
             //padding-top: 44px;
             .top{
                 height: 41px;text-align: center;font-size: 13px;color: #666;line-height: 41px;
+                .refresh{color: #0072c6;}
             }
             .title{
                 height: 31px;text-align: center;font-size: 15px;line-height: 31px;color: #1089e0;background: #f2f9ff

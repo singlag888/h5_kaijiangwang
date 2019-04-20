@@ -59,14 +59,18 @@ export default {
                     code: this.curLotteryCode
                 });
                 //预测计划-排行榜(首页)
-                this.getForecastRanking({
-                    code: this.curLotteryCode
-                });
+                this.getForecastRanking({code: this.curLotteryCode});
             }
         },
+        $route(to, from) {
+            this.path = to.path
+        }
     },
     mounted() {
         this.path = this.$route.path
+        if( this.path == '/second-detail/planInfo') {
+            this.path = '/second-detail/plan'
+        }
         //历史记录
         this.getLotteryData({
             open_date: formatTime(this.curSelectTime, "YYYY-MM-DD"),
@@ -80,9 +84,7 @@ export default {
             code: this.curLotteryCode
         });
         //预测计划-排行榜(首页)
-        this.getForecastRanking({
-            code: this.curLotteryCode
-        });
+        this.getForecastRanking({ code: this.curLotteryCode });
         //预测计划首页
         // this.getForecastPlanIndex();
         //预测计划 -- 概貌

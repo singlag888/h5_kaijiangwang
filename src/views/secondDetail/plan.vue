@@ -22,7 +22,7 @@
                         <p>{{item.forecast_quantity}}码</p>
                         <p>{{item.result_sum}}中{{item.last_sum}}</p>
                         <p>{{Math.floor(item.result * 10000) / 100}}%</p>
-                        <p>493</p>
+                        <p>{{item.profit}}</p>
                         <p @click="goPlanInfo(item.expert_id, item.forecast_quantity, item.location, item.name)">查看</p>
                     </li>
                 </ul>
@@ -52,7 +52,7 @@ export default {
             this.activeTab = name
         },
         goPlanInfo(expert_id, forecast_quantity, location, name) {
-            this.$router.replace({
+            this.$router.push({
                 path: '/second-detail/planInfo', 
                 query:{'expertId': expert_id, 'forecastQuantity': forecast_quantity, 'location': rankingMap(location), 'name': name}
             })

@@ -7,6 +7,11 @@ const mutations = {
   //   state.showLoading = data;
   // },
 
+  //二级页面选项卡
+  [types.SHOW_DRAWER_TAB](state, data) {
+    state.showDrawerTba = data;
+  },
+
   //基础配置数据
   [types.BASE_SETTING_DATA](state, obj) {
     state.baseSettingData = obj;

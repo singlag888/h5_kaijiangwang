@@ -4,7 +4,7 @@
         <div>
             <ul v-for="(thData, index) in sidesTotal && filterData(sidesTotal)" :key="index">
                 <li class="title">{{thData.location_name}}</li>
-                <li class="item" v-for="(item, key) in sidesTotal" v-if="thData.location == item.location" >
+                <li class="item" v-for="(item, key) in sidesTotal" v-show="thData.location == item.location" :key="key">
                     <p>{{item.result}}</p>
                     <p>{{item.count}}</p>
                 </li>
@@ -23,30 +23,24 @@ export default {
     methods: {
         // 转换数据过滤相同数据
         filterData(list) {
-        let data = list;
-        let obj = {};
-        let arr =
-            data &&
-            data.reduce(function(item, next) {
-            obj[next.location]
-                ? ""
-                : (obj[next.location] = true && item.push(next));
-            return item;
+            let data = list;
+            let obj = {};
+            let arr = data && data.reduce(function(item, next) {
+                obj[next.location] ? "" : (obj[next.location] = true && item.push(next));
+                return item;
             }, []);
 
-        arr &&
-            arr.forEach(temp => {
-            let len = 0;
-            data &&
-                data.forEach(item => {
-                if (temp.location == item.location) {
-                    len++;
-                }
+            arr && arr.forEach(temp => {
+                let len = 0;
+                data && data.forEach(item => {
+                    if (temp.location == item.location) {
+                        len++;
+                    }
                 });
-            this.$set(temp, "len", len);
+                this.$set(temp, "len", len);
             });
-        // console.log(arr);
-        return arr;
+            // console.log(arr)
+            return arr;
         },
     },
     mounted() {
