@@ -1,9 +1,13 @@
-import Vue from 'vue';
 //loading
-// export const showLoading =state=> state.showLoading;
+export const showLoading =state=> state.showLoading;
+export const showLoadMore =state=> state.showLoadMore;
+export const noContent =state=> state.noContent;
+
+// 二级页面下拉显示
+export const showDrawerTba =state=> state.showDrawerTba;
 
 // 页面公用选项卡
-export const tabControl =state=> state.tabControl;
+// export const tabControl =state=> state.tabControl;
 export const tabPlanInfo =state=> state.tabPlanInfo;
 
 // 基础配置数据
@@ -27,24 +31,23 @@ export const dragonData =state=> state.dragonData;
 // 双面统计
 export const sidesTotal =state=> state.sidesTotal;
 
-// 预测计划-排行榜(首页)
-export const forecastRanking =state=> state.forecastRanking;
-
-// 预测计划
-// export const forecastPlan =state=> state.forecastPlan;
-
-// 预测计划首页
-export const forecastPlanIndex =state=> state.forecastPlanIndex;
-
-// 获取预测计划 -- 概貌
-export const forecastOverview =state=> state.forecastOverview;
-
 //websocket开奖结果
 export const socketOpenResult =state=> state.socketOpenResult;
 
+//websocket計劃
+export const socketPlanResult =state=> state.socketPlanResult;
 
 // 当前彩种开奖结果
 // export const openResult =state=> state.openResult;
+
+// 预测计划-排行榜(首页)
+export const forecastRanking =state=> state.forecastRanking;
+
+// 预测计划首页
+// export const forecastPlanIndex =state=> state.forecastPlanIndex;
+
+// 获取预测计划 -- 概貌
+// export const forecastOverview =state=> state.forecastOverview;
 
 // 历史开奖title
 // export const historyTitle =state=> {
@@ -56,10 +59,6 @@ export const socketOpenResult =state=> state.socketOpenResult;
 //     });
 //     return state.historyTitle;
 // };
-
-
-
-
 
 // 文章分类
 // export const articleCategory =state=> state.articleCategory;
@@ -75,8 +74,6 @@ export const socketOpenResult =state=> state.socketOpenResult;
 
 //当前彩种所有球号
 // export const curLotteryNumbers =state=> state.curLotteryNumbers;
-
-
 
 //大小单双分布
 // export const screeningParameter =state=> state.screeningParameter;

@@ -17,49 +17,50 @@
                 </transition>   
             </p>           
         </div>
-        <div class="content">
-            <div class="top">专家: {{this.$route.query.name}} 1天/{{planData.wheel_quantity}}轮 1轮/{{planData.wheel_expect_quantity}}期 <span class="refresh" @click="refresh">刷新页面</span></div>
-            <ul v-for="(item, index) of planData.expert_forecast_data_list" :key="index">
-                <li class="title">第{{planData.expert_forecast_data_list.length - index}}轮  待开奖:{{calcOopenNumToTal(item).noOpen}}  中:{{calcOopenNumToTal(item).win}}  挂:{{calcOopenNumToTal(item).noWin}}  胜率:{{calcOopenNumToTal(item).winPro}}</li>
-                <li class="item">
-                    <p>期</p>
-                    <p>轮次</p>
-                    <p>期号</p>
-                    <p>预测</p>
-                    <p>开奖</p>
-                    <p>结果</p>
-                    <p>盈利</p>
-                </li>
-                <li class="item" v-for="(obj, key) in item" :key="key">
-                    <p>{{item.length - key}}</p>
-                    <p>第{{planData.expert_forecast_data_list.length - index}}轮</p>
-                    <p>{{obj.expect.slice(-4)}}</p>
-                    <p>
-                        <span :style="{color: obj.open_number == temp ? 'red' : ''}" v-for="(temp,k) in obj.forecast_numbers" :key="k"><template v-if="k!=0">,</template>{{temp}}</span>
-                    </p>
-                    <p>
-                        <span v-if="obj.status == 0">待开</span>
-                        <span v-else v-for="(temp,k) in obj.open_numbers" :key="k"><span style="color: red" v-show="obj.open_number == temp">{{temp}}</span></span>
-                    </p>
-                    <p>
-                        <span v-if="obj.status == 0">待开</span>
-                        <span style="color: green" v-else-if="obj.forecast_numbers.indexOf(obj.open_number) != -1">中</span>
-                        <span style="color: red" v-else>挂</span>
-                    </p>
-                    <p>{{obj.deadline_win_or_lose}}</p>
-                </li>
-            </ul>
+        <div class="content" ref="outerWrapper">
+            <div>
+                <div class="top">专家: <span v-for="(item, index) in planData.expert_list" :key="index" v-show="item.id == expertId">{{item.name}}</span> 1天/{{planData.wheel_quantity}}轮 1轮/{{planData.wheel_expect_quantity}}期 <span class="refresh" @click="refresh">刷新页面</span></div>
+                <ul v-for="(item, index) of planData.expert_forecast_data_list" :key="index">
+                    <li class="title">第{{planData.expert_forecast_data_list.length - index}}轮  待开奖:{{calcOopenNumToTal(item).noOpen}}  中:{{calcOopenNumToTal(item).win}}  挂:{{calcOopenNumToTal(item).noWin}}  胜率:{{calcOopenNumToTal(item).winPro}}</li>
+                    <li class="item">
+                        <p>期</p>
+                        <p>轮次</p>
+                        <p>期号</p>
+                        <p>预测</p>
+                        <p>开奖</p>
+                        <p>结果</p>
+                        <p>盈利</p>
+                    </li>
+                    <li class="item" v-for="(obj, key) in item" :key="key">
+                        <p>{{item.length - key}}</p>
+                        <p>第{{planData.expert_forecast_data_list.length - index}}轮</p>
+                        <p>{{obj.expect.slice(-4)}}</p>
+                        <p>
+                            <span :style="{color: obj.open_number == temp ? 'red' : ''}" v-for="(temp,k) in obj.forecast_numbers" :key="k"><template v-if="k!=0">,</template>{{temp}}</span>
+                        </p>
+                        <p>
+                            <span v-if="obj.status == 0">待开</span>
+                            <span v-else v-for="(temp,k) in obj.open_numbers" :key="k"><span style="color: red" v-show="obj.open_number == temp">{{temp}}</span></span>
+                        </p>
+                        <p>
+                            <span v-if="obj.status == 0">待开</span>
+                            <span style="color: green" v-else-if="obj.forecast_numbers.indexOf(obj.open_number) != -1">中</span>
+                            <span style="color: red" v-else>挂</span>
+                        </p>
+                        <p>{{obj.deadline_win_or_lose}}</p>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { Tab, TabItem } from 'vux'
 import { mapGetters, mapActions } from "vuex";
 import { getCurTime } from "@/js/utils";
+import BScroll from 'better-scroll';
 
 export default {
-    components: { Tab, TabItem },
     data() {
         return {
             planData: {},
@@ -142,7 +143,13 @@ export default {
         ...mapGetters(["curLotteryCode"])
     },
     mounted() {
-
+        this.$nextTick(() => {
+            if(!this.scroll) {
+                this.scroll = new BScroll(this.$refs.outerWrapper,{click: true})               
+            }else {
+                this.scroll.refresh()
+            }
+        })
     },
     watch: {
         curLotteryCode: function() {
@@ -154,6 +161,13 @@ export default {
                 this.location
             );
         },
+        '$route.query.expertId': {
+            handler(newVal, oldVal) {
+                this.expertId = newVal
+            },
+            deep: true,
+            immediate: true
+        },
         expertId() {
             this.getForecastPlanFunc(
                 this.curLotteryCode,
@@ -163,6 +177,13 @@ export default {
                 this.location
             );
         },
+        '$route.query.location': {
+            handler(newVal, oldVal) {
+                this.location = newVal
+            },
+            deep: true,
+            immediate: true
+        },
         location() {
             this.getForecastPlanFunc(
                 this.curLotteryCode,
@@ -171,6 +192,13 @@ export default {
                 this.forecastQuantity,
                 this.location
             );
+        },
+        '$route.query.forecastQuantity': {
+            handler(newVal, oldVal) {
+                this.forecastQuantity = newVal
+            },
+            deep: true,
+            immediate: true
         },
         forecastQuantity(){
             this.getForecastPlanFunc(
@@ -207,6 +235,7 @@ export default {
         }
         .content{
             //padding-top: 44px;
+            overflow: hidden;position:absolute;top: 240px;bottom: 10px;left: 0;right: 0;
             .top{
                 height: 41px;text-align: center;font-size: 13px;color: #666;line-height: 41px;
                 .refresh{color: #0072c6;}

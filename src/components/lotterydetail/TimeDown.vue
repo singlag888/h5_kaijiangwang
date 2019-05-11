@@ -72,6 +72,9 @@ export default {
             }
         }
     },
+    computed: {
+
+    },
     watch: {
         time() {
             this.timeDown();

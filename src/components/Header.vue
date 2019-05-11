@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <x-icon v-if="$route.meta.showBack" type="ios-arrow-left" size="30" @click="goBack"></x-icon>
-        <img class="header-img" src="../../static/img/header.png" alt="">
+        <img class="header-img" :src="baseSettingData.site_logo" alt="">
         <div v-if="$route.meta.showBack" class="navicon" @click="showTab">
             <x-icon type="navicon" size="35" style="top:0;left:0"></x-icon>
         </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
    data() {
@@ -25,15 +25,17 @@ export default {
            this.$router.go(-1)
        },
        showTab() {
-           if(this.showDrawerTba == true) {
-               this.$store.commit('SHOW_DRAWER_TAB', false)
-           }else {
-               this.$store.commit('SHOW_DRAWER_TAB', true)
-           }
+            this.$store.commit('SHOW_DRAWER_TAB', !this.showDrawerTba)
        }
    },
    computed: {
-       ...mapState(['showDrawerTba'])
+       ...mapGetters(['baseSettingData']),
+        showDrawerTba() {
+            return this.$store.state.showDrawerTba
+        }
+   },
+   mounted() {
+
    }
 }
 </script>
@@ -45,7 +47,7 @@ export default {
             fill: #fff;position: absolute; left: 5px; top: 10px;
         }
         .header-img{
-            width: 119px; height: 50px;position: absolute;top: 0;left: 50%;transform: translate(-50%,0)
+            position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 145px;
         }
         .navicon{
             position: absolute;right: 5px;width: 35px;height: 35px;top: 50%;transform: translate(0, -50%)

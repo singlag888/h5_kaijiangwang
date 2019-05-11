@@ -1,6 +1,6 @@
 <!-- 双面统计 -->
 <template>
-    <div class="two-sided">
+    <div class="two-sided" ref="outerWrapper">
         <div>
             <ul v-for="(thData, index) in sidesTotal && filterData(sidesTotal)" :key="index">
                 <li class="title">{{thData.location_name}}</li>
@@ -15,6 +15,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import BScroll from 'better-scroll';
 
 export default {
     computed: {
@@ -44,14 +45,20 @@ export default {
         },
     },
     mounted() {
-        
+        this.$nextTick(() => {
+            if(!this.scroll) {
+                this.scroll = new BScroll(this.$refs.outerWrapper,{click: true})               
+            }else {
+                this.scroll.refresh()
+            }
+        })
     }
 }
 </script>
 
 <style lang="scss" scoped>
     .two-sided{
-        padding:8px;
+        padding:8px;overflow: hidden;position:absolute;top: 166px;bottom: 10px;left: 0;right: 0;
         ul{
             box-shadow: 0 4px 4px rgba(0,0,0,.09);margin-bottom: 8px;
             li:last-child{

@@ -40,9 +40,9 @@ export default {
   //get请求
   get(urlObj, param) {
     if (urlObj.isOpenLoading) {
-        // store.commit('SHOW_LOADING', true)
-        // console.log(store.state.showLoading)
+        store.commit('SHOW_LOADING', true)
     }
+    store.commit('SHOW_LOADMORE', true)
     return new Promise((resolve, reject) => {
       clearTimeout(urlTimer[urlObj.url]);
       urlTimer[urlObj.url] = setTimeout(function () {
@@ -61,8 +61,8 @@ export default {
           // console.log(res)
           if (res) {
             resolve(res && res.data);
-            // store.commit('SHOW_LOADING', false)
-            // console.log(store.state.showLoading)
+            store.commit('SHOW_LOADING', false)
+            store.commit('SHOW_LOADMORE', false)
           }
         });
       }, 500)

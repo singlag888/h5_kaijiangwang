@@ -27,7 +27,7 @@ export function getLotteryCodes() {
 export function getLotteryData(params) {
     let param = Object.assign({}, {
         open_date: params.open_date,
-        page_size: params.page_size || 100,
+        page_size: params.page_size || 30,
         page: params.page || 1,
         code: params.code,
     });
@@ -51,6 +51,14 @@ export function getSidesTotal(params) {
     return axios.get(urls.getSidesTotalAPI(), param);
 }
 
+//  开奖信息
+// export function getLotteryExpect(code) {
+//     let param = Object.assign({}, {
+//         code: code,
+//     });
+//     return axios.get(urls.getLotteryExpectAPI(), param);
+// }
+
 // 预测计划-排行榜(首页)
 export function getForecastRanking(params) {
     let param = Object.assign({}, {
@@ -73,24 +81,16 @@ export function getForecastPlan(params) {
 }
 
 //  预测计划首页
-export function getForecastPlanIndex() {
-    return axios.get(urls.getForecastPlanIndexAPI(), {});
-}
+// export function getForecastPlanIndex() {
+//     return axios.get(urls.getForecastPlanIndexAPI(), {});
+// }
 
 //  预测计划 -- 概貌
-export function getForecastOverview(params) {
-    let param = Object.assign({}, {
-        code: params.code
-    });
-    return axios.get(urls.getForecastOverviewAPI(), param);
-}
-
-//  开奖信息
-// export function getLotteryExpect(code) {
+// export function getForecastOverview(params) {
 //     let param = Object.assign({}, {
-//         code: code,
+//         code: params.code
 //     });
-//     return axios.get(urls.getLotteryExpectAPI(), param);
+//     return axios.get(urls.getForecastOverviewAPI(), param);
 // }
 
 //  获取文章列表

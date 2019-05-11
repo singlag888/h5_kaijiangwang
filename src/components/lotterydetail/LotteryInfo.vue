@@ -3,7 +3,7 @@
     <div class="lottery-info">
         <div class="info">
             <div>
-                {{ curReslut.name }}{{curReslut.code_title}}&nbsp&nbsp
+                {{ curReslut.name }}&nbsp;&nbsp;
                 <span class="color999">{{curReslut.expect}}期</span>
             </div>
             <!-- 时间 -->
@@ -17,7 +17,7 @@
 <script>
 import TimeDown from './TimeDown'
 import Number from './Number'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     components: { Number, TimeDown },
@@ -47,10 +47,7 @@ export default {
             if(this.socketOpenResult.code == this.curReslut.code){
                 this.curReslut = this.socketOpenResult;
             }
-        },
-        // isOPen(){
-        //     this.$emit('test', this.isOPen)
-        // }
+        }
     }
 }
 </script>

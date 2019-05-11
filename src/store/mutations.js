@@ -3,11 +3,17 @@ import * as types from './mutationsTypes'
 const mutations = {
 
   //loading
-  // [types.SHOW_LOADING](state, data) {
-  //   state.showLoading = data;
-  // },
+  [types.SHOW_LOADING](state, data) {
+    state.showLoading = data;
+  },
+  [types.SHOW_LOADMORE](state, data) {
+    state.showLoadMore = data;
+  },
+  [types.NO_CONTENT](state, data) {
+    state.noContent = data;
+  },
 
-  //二级页面选项卡
+  //二级页面下拉显示
   [types.SHOW_DRAWER_TAB](state, data) {
     state.showDrawerTba = data;
   },
@@ -34,7 +40,8 @@ const mutations = {
 
   // 基础数据
   [types.LOTTERY_DATA](state, list) {
-    state.lotteryData = list;
+    state.lotteryData = list
+    // console.log(state.lotteryData)
   },
 
     //长龙数据
@@ -47,29 +54,14 @@ const mutations = {
     state.sidesTotal = list;
   },
 
-  // 预测计划-排行榜(首页)
-  [types.FORECATST_RANKING](state, list) {
-    state.forecastRanking = list;
-  },
-
-   // 预测计划
-  // [types.FORECAST_PLAN](state, obj) {
-  //   state.forecastPlan = obj;
-  // },
-
-   // 预测计划首页
-  [types.FORECAST_PLAN_INDEX](state, list) {
-    state.forecastPlanIndex = list;
-  },
-
-   // 获取预测计划 -- 概貌
-  [types.FORECAST_OVERVIEW](state, list) {
-    state.forecastOverview = list;
-  },
-
   //websocket开奖结果
   [types.SOCKET_OPEN_RESULT](state, obj) {
     state.socketOpenResult = obj;
+  },
+
+  //websocket計劃
+  [types.SOCKET_PLAN_RESULT](state, obj) {
+    state.socketPlanResult = obj;
   },
 
   // 当前彩种开奖结果
@@ -77,28 +69,35 @@ const mutations = {
   //   state.openResult = obj;
   // },
 
-   
+  // 预测计划-排行榜(首页)
+  [types.FORECATST_RANKING](state, list) {
+    state.forecastRanking = list;
+  },
+
+   // 预测计划首页
+  // [types.FORECAST_PLAN_INDEX](state, list) {
+  //   state.forecastPlanIndex = list;
+  // },
+
+   // 获取预测计划 -- 概貌
+  // [types.FORECAST_OVERVIEW](state, list) {
+  //   state.forecastOverview = list;
+  // },
 
   // 历史开奖title
   // [types.HISTORY_TITLE](state, list) {
   //   state.historyTitle = list;
   // },
 
- 
-
   // 文章分类
   // [types.ARTICLE_CATEGORY](state, obj) {
   //   state.articleCategory = obj;
   // },
 
-  
-
   // 广告分组
   // [types.AD_LIST](state, list) {
   //   state.adList = list;
   // },
-
- 
 
   // 号码名次
   // [types.LOCATION_NAMES](state, list) {
@@ -110,21 +109,11 @@ const mutations = {
   //   state.basicTrend = list;
   // },
 
-
-
-
-
-  
-
-
-
   //当前彩种所有球号
   // [types.CUR_LOTTERY_NUMBERS](state, list) {
   //   state.curLotteryNumbers = list;
   // },
-
- 
-
+  
   //大小单双分布
   // [types.SCREENING_PARAMETER](state, list) {
   //   state.screeningParameter = list;

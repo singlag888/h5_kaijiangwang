@@ -1,8 +1,6 @@
 import * as types from './mutationsTypes';
 import * as api from '@/js/api';
 import { saveAccessToken } from '@/js/cache';
-import { getCurTime } from "@/js/utils";
-import Vue from 'vue'
 
 // 获取access token
 export const getAccessToken = ({
@@ -19,7 +17,7 @@ export const getAccessToken = ({
       dispatch('getSetting');
 
       // 彩种编码
-      dispatch('getLotteryCodes');
+      // dispatch('getLotteryCodes');
 
     } else {
       return 404;
@@ -53,6 +51,7 @@ export const getLotteryCodes = ({
   return api.getLotteryCodes(params).then((res) => {
     if (res.code == 200) {
       commit(types.LOTTERY_CODES, res.data);
+      // commit(types.SHOW_LOADING, false)
       //console.log(res)
     } else {
       //console.log(res)
@@ -85,16 +84,18 @@ export const getLotteryData = ({
 }, params) => {
   return api.getLotteryData(params).then((res) => {
     if (res.code == 200) {
-      // 保存号码名次
-      // commit(types.LOCATION_NAMES, res.data && res.data.location_names);
-      // 保存基础数据
-      commit(types.LOTTERY_DATA, res.data && res.data.rows);
-      // 保存历史开奖title
-      // commit(types.HISTORY_TITLE, res.data && res.data.history_data_fields);
-      // 保存当前彩种所有球号
-      // commit(types.CUR_LOTTERY_NUMBERS, res.data && res.data.lottery_numbers);
-      // 保存当前彩种大小单双分布
-      // commit(types.SCREENING_PARAMETER, res.data && res.data.screeningParameter);
+      // console.log(params)    
+      let result = res.data.rows
+      if(params.page == 1) {
+        commit(types.LOTTERY_DATA, result);
+      }else {
+        commit(types.LOTTERY_DATA, [...state.lotteryData,...result]);
+        if(result.length == 0) {
+          commit(types.NO_CONTENT, true)
+        }else {
+          commit(types.NO_CONTENT, false)
+        }
+      }
     } else {
       //console.log(res)
     }
@@ -112,6 +113,7 @@ export const getLongDragon = ({
     if (res.code == 200) {
       // todo
       commit(types.SAVE_CHANGLONG_DATA, res.data);
+      // commit(types.SHOW_LOADING, false)
     } else {
       //console.log(res)
     }
@@ -128,6 +130,7 @@ export const getSidesTotal = ({
   return api.getSidesTotal(params).then((res) => {
     if(res.code == 200) {
       commit(types.SAVE_SIDES_TOTAL, res.data)
+      // commit(types.SHOW_LOADING, false)
     } else {
       //console.log(res)
     }
@@ -144,6 +147,7 @@ export const getForecastRanking = ({
   return api.getForecastRanking(params).then((res) => {
     if(res.code == 200) {
       commit(types.FORECATST_RANKING, res.data)
+      // commit(types.SHOW_LOADING, false)
     } else {
       //console.log(res)
     }
@@ -160,34 +164,6 @@ export const getForecastPlan = ({
   return api.getForecastPlan(params);
 }
 
-// 获取预测计划首页
-export const getForecastPlanIndex = ({
-  commit,
-  state
-}) => {
-  api.getForecastPlanIndex().then(res => {
-    if (res.code == 200) {
-      commit(types.FORECAST_PLAN_INDEX, res.data);
-    } else {
-      // todo
-    }
-  });
-}
-
-// 获取预测计划 -- 概貌
-export const getForecastOverview = ({
-  commit,
-  state
-}, params) => {
-  api.getForecastOverview(params).then(res => {
-    if (res.code == 200) {
-      commit(types.FORECAST_OVERVIEW, res.data);
-    } else {
-      // todo
-    }
-  });
-}
-
 // 开奖信息
 // export const getLotteryExpect = ({
 //   commit,
@@ -198,6 +174,34 @@ export const getForecastOverview = ({
 //       commit(types.OPEN_RESULT,res.data);
 //     }
 //   });;
+// }
+
+// 获取预测计划首页
+// export const getForecastPlanIndex = ({
+//   commit,
+//   state
+// }) => {
+//   api.getForecastPlanIndex().then(res => {
+//     if (res.code == 200) {
+//       commit(types.FORECAST_PLAN_INDEX, res.data);
+//     } else {
+//       // todo
+//     }
+//   });
+// }
+
+// 获取预测计划 -- 概貌
+// export const getForecastOverview = ({
+//   commit,
+//   state
+// }, params) => {
+//   api.getForecastOverview(params).then(res => {
+//     if (res.code == 200) {
+//       commit(types.FORECAST_OVERVIEW, res.data);
+//     } else {
+//       // todo
+//     }
+//   });
 // }
 
 // 获取文章列表

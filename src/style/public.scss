@@ -58,7 +58,7 @@ iframe {
         $i: $i + 1;
         .num#{$i} {
           background-color: $color;
-          border-radius: 5px
+          border-radius: 4px
         }
     }
 } 

@@ -4,79 +4,70 @@
     <div class="main">
       <router-view/>
     </div>
-    <div class="tab-drawer" v-show="showDrawerTba">
-      <ul>
-        <li class="item" v-for="(item, index) in filterData(lotteryCodes)" :key="index">
-          <div class="title">{{item.code_title}}</div>
-          <div class="info">
-            <span @click="goTo(obj.code, obj.code_type)" v-for="(obj, key) in lotteryCodes" :key="key" v-show="item.code_title == obj.code_title">{{obj.name}}</span>
-          </div>
-        </li>
-      </ul>
+    <!-- loading -->
+    <div v-show="showLoading" class="modal">
+      <loading :show="showLoading" text="loading..."></loading>
     </div>
-    <Footer/>
-    <!-- <loading :show="show" text="loading..."></loading> -->
+     <!-- 推送 -->
+    <div class="push">
+      <p class="item" v-for="(item, index) in pushArr" :key="index">
+        {{item.name}}出现【{{item.last_count}}中{{item.result_sum}}】<span class="info" @click="goPlanInfo(item.code, item.code_type, item.expert_id, item.forecast_quantity, item.location)">查看</span> 
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import { mapGetters, mapState, mapActions } from "vuex";
-import { formatTime } from "@/js/utils";
-// import { Loading } from 'vux'
+import { mapActions, mapGetters } from "vuex";
+import { Loading  } from 'vux'
 
 export default {
-  components:{ Header, Footer },
+  components:{ Header, Loading },
   name: 'App',
   data() {
     return {
-
+      pushArr: []
     }
   },
+  created() {
+
+  },
   methods: {
-    // 转换数据过滤相同数据
-    filterData(list) {
-      let arr = [];
-      let data = list;
-      for(let i = 0; i < data.length; i++) {
-        for(let j = i+1; j < data.length; j++) {
-          if(data[i].code_title == data[j].code_title) {
-            ++i
-          }
-        }
-        arr.push(data[i])
-      }
-      return arr
-    },
-    ...mapActions(['chengecurLotteryCode', 'chenge_cur_lootery_type', 'getLotteryData', 'getLongDragon', 'getSidesTotal', 'getForecastRanking']),
-    goTo(code, type) {
+    ...mapActions(["getLotteryCodes", "chengecurLotteryCode", "chenge_cur_lootery_type"]),
+    goPlanInfo(code, type, expert_id, forecast_quantity, location) {
+      // 修改彩种的code
       this.chengecurLotteryCode(code);
+      // 修改彩种的type
       this.chenge_cur_lootery_type(type);
-      this.$router.replace({path: '/second-detail/history'})
-      this.$store.commit('SHOW_DRAWER_TAB', false)
-      //历史记录
-      this.getLotteryData({
-        open_date: formatTime(this.curSelectTime, "YYYY-MM-DD"),
-        code: code
-      });
-      // 长龙
-      this.getLongDragon({ code: code });
-      // 双面统计
-      this.getSidesTotal({
-        open_date: formatTime(this.curSelectTime, "YYYY-MM-DD"),
-        code: code
-      });
-      //预测计划-排行榜(首页)
-      this.getForecastRanking({ code: code });
+      this.$router.push({
+        path: '/second-detail/planInfo', 
+        query:{'expertId': expert_id, 'forecastQuantity': forecast_quantity, 'location': location}
+      })
     }
   },
   computed: {
-    ...mapGetters(['lotteryCodes']),
-    ...mapState(['showDrawerTba'])
+    ...mapGetters(['showLoading', 'socketPlanResult'])
   },
   mounted() {
-
+    this.getLotteryCodes()
+  },
+  watch: {
+    socketPlanResult() {
+      this.pushArr.push(this.socketPlanResult)
+      // 推送最多显示三条
+      if(this.pushArr.length > 3) {
+        this.pushArr.shift()
+      }
+    },
+    pushArr() {
+      let _this = this
+      setTimeout(() => {
+        if(_this.pushArr.length != 0) {
+          _this.pushArr.shift()
+        }
+      },10000)
+    }
   }
 }
 </script>
@@ -84,21 +75,24 @@ export default {
 <style lang="scss">
     #app {
       max-width: 640px;
-      .tab-drawer{
-        width: 100%;position: fixed;top: 50px;bottom: 0;
-        .item{
-          display: flex;padding: 10px;border-bottom: 1px solid #e6e6e6;line-height: 25px;background: #fff;overflow: hidden;
-          .title{
-            width: 20%;
-          }
-          .info{width: 80%;
-            span{margin-right: 10px;color: #999;font-size: 14px}
-          }
+      .main{
+        width: 100%; padding-top: 50px;padding-bottom: 10px;
+      }
+      .modal{
+        position: fixed;top: 0;left: 0;bottom: 0;right: 0;background: rgba(0,0,0,.5);z-index: 200;
+        .weui-toast{
+          top: 50%;transform:translate(0, -50%)
         }
       }
-      .main{
-        width: 100%; padding-top: 50px;
+      .push{
+        position:fixed;bottom: 5px;left: 50%;transform: translate(-50%, 0);color: #fff;
+        .item{
+          padding: 5px 10px;margin-bottom: 5px;background: rgba(0,0,0,.6);border-radius: 5px;text-align: center; white-space:nowrap;font-size: 14px;
+          .info{color: #FFFF00;}       
+        }
+        .item:last-child{
+          margin-bottom: 0;
+        }
       }
-      
     }
 </style>

@@ -19,7 +19,7 @@ export function getSettingAPI(){
 export function getLotteryCodesAPI(){
     return {
         url: `/v1/lotteryCodes`,
-        isOpenLoading: false
+        isOpenLoading: true
     }
 }
 
@@ -35,7 +35,7 @@ export function getLotteryDataAPI(){
 export function getLongDragonAPI(){
     return {
         url: `/v1/longDragon`,
-        isOpenLoading: false
+        isOpenLoading: true
     }
 }
 
@@ -43,7 +43,7 @@ export function getLongDragonAPI(){
 export function getSidesTotalAPI(){
     return {
         url: `/v1/sidesTotal`,
-        isOpenLoading: false
+        isOpenLoading: true
     }
 }
 
@@ -51,7 +51,7 @@ export function getSidesTotalAPI(){
 export function getForecastRankingAPI(){
     return {
         url: `/v1/ForecastRanking`,
-        isOpenLoading: false
+        isOpenLoading: true
     }
 }
 
@@ -59,23 +59,7 @@ export function getForecastRankingAPI(){
 export function getForecastPlanAPI(){
     return {
         url: `/v1/ForecastPlan`,
-        isOpenLoading: false
-    }
-}
-
-//  获取预测计划首页
-export function getForecastPlanIndexAPI(){
-    return {
-        url: `/v1/ForecastPlanIndex`,
-        isOpenLoading: false
-    }
-}
-
-//  获取预测计划 -- 概貌
-export function getForecastOverviewAPI(){
-    return {
-        url: `/v1/forecastOverview`,
-        isOpenLoading: false
+        isOpenLoading: true
     }
 }
 
@@ -83,6 +67,22 @@ export function getForecastOverviewAPI(){
 // export function getLotteryExpectAPI(){
 //     return {
 //         url: `/v1/lotteryExpect`,
+//         isOpenLoading: false
+//     }
+// }
+
+//  获取预测计划首页
+// export function getForecastPlanIndexAPI(){
+//     return {
+//         url: `/v1/ForecastPlanIndex`,
+//         isOpenLoading: false
+//     }
+// }
+
+//  获取预测计划 -- 概貌
+// export function getForecastOverviewAPI(){
+//     return {
+//         url: `/v1/forecastOverview`,
 //         isOpenLoading: false
 //     }
 // }
