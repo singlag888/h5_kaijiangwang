@@ -142,6 +142,7 @@ axios.interceptors.response.use(
             break;
           case 408:
             error.message = "请求超时";
+            router.push('/page408')
             break;
           case 500:
             error.message = "服务器端出错";

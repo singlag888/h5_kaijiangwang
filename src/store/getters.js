@@ -6,10 +6,6 @@ export const noContent =state=> state.noContent;
 // 二级页面下拉显示
 export const showDrawerTba =state=> state.showDrawerTba;
 
-// 页面公用选项卡
-// export const tabControl =state=> state.tabControl;
-export const tabPlanInfo =state=> state.tabPlanInfo;
-
 // 基础配置数据
 export const baseSettingData =state=> state.baseSettingData;
 
@@ -37,44 +33,14 @@ export const socketOpenResult =state=> state.socketOpenResult;
 //websocket計劃
 export const socketPlanResult =state=> state.socketPlanResult;
 
+//websocket 时间
+export const socketUpdateTime =state=> state.socketUpdateTime;
+
 // 当前彩种开奖结果
 // export const openResult =state=> state.openResult;
 
 // 预测计划-排行榜(首页)
 export const forecastRanking =state=> state.forecastRanking;
 
-// 预测计划首页
-// export const forecastPlanIndex =state=> state.forecastPlanIndex;
-
-// 获取预测计划 -- 概貌
-// export const forecastOverview =state=> state.forecastOverview;
-
-// 历史开奖title
-// export const historyTitle =state=> {
-//     state.historyTitle && state.historyTitle.forEach(item=>{
-//         if(!Array.isArray(item)){
-//             let len = state.lotteryData.length>0 ? state.lotteryData[0].data[item.type].length : 0;
-//             Vue.set(item,'len',len);
-//         }
-//     });
-//     return state.historyTitle;
-// };
-
-// 文章分类
-// export const articleCategory =state=> state.articleCategory;
-
-// 广告分组
-// export const adList =state=> state.adList;
-
-// 号码名次
-// export const locationNames =state=> state.locationNames;
-
-// 基本趋势-统计
-// export const basicTrend =state=> state.basicTrend;
-
-//当前彩种所有球号
-// export const curLotteryNumbers =state=> state.curLotteryNumbers;
-
-//大小单双分布
-// export const screeningParameter =state=> state.screeningParameter;
-
+// 计划参数
+export const numberPlanParams =state=> state.numberPlanParams;

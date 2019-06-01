@@ -2,7 +2,7 @@
     <div @click="closeDrawerTba">
         <div class="lotteryInfo" v-for="(obj, index) in lotteryCodes" :key="index">
             <LotteryInfo  :result="obj" v-show="obj.code == curLotteryCode"/>
-            <tab :line-width=2 active-color='#0072c6' v-show="obj.code == curLotteryCode">
+            <tab :line-width=2 active-color='#51a4fb' v-show="obj.code == curLotteryCode">
                 <tab-item v-if="obj.is_history_data == 1" class="vux-center" :selected="path == '/second-detail/history'" @on-item-click="onItemClick('/second-detail/history')">开奖记录</tab-item>
                 <tab-item v-if="obj.is_long_dragon == 1" class="vux-center" :selected="path == '/second-detail/trend-line'" @on-item-click="onItemClick('/second-detail/trend-line')">长龙统计</tab-item>
                 <tab-item v-if="obj.is_sides_total == 1" class="vux-center" :selected="path == '/second-detail/two-sided'" @on-item-click="onItemClick('/second-detail/two-sided')">双面统计</tab-item>
@@ -137,7 +137,6 @@ export default {
         display: flex
     }
     .second-views{
-        // overflow: hidden;position:absolute;top: 166px;bottom: 0;left: 0;right: 0;
         padding-top: 44px
     }
     .tab-drawer{
@@ -153,7 +152,7 @@ export default {
                     margin-right: 25px;color: #999;font-size: 13px;display: inline-block;padding:0 5px;border-radius: 5px;
                 }
                 .active{
-                    color: #fff;background: red;
+                    color: #fff;background: #51a4fb;
                 }
             }
         }

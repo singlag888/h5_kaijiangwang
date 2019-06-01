@@ -2,7 +2,7 @@
 <template>
     <div class="plan-info">
         <div class="tab">
-            <p class="location" @click="location = item.location" v-for="(item, index) in planData.location" :key="index" :class="item.location == location ? 'active' : ''">
+            <p class="location" @click="selectLocation(item.location)" v-for="(item, index) in planData.location" :key="index" :class="item.location == location ? 'active' : ''">
                 {{item.location_name.length == '3' ? item.location_name.slice(1, 2) : item.location_name.slice(0, 1)}}
                 <transition name="fade">
                     <span class="line" v-show="item.location == location"></span>
@@ -10,10 +10,10 @@
             </p>           
         </div>
         <div class="tab">
-            <p class="forecast-qantity" @click="forecastQuantity = item.forecast_quantity" v-for="(item, index) in planData.forecast_quantity_list" :key="index" :class="item.forecast_quantity == forecastQuantity ? 'active' : ''">
-                {{item.forecast_quantity}}码榜
+            <p class="forecast-qantity" @click="selectForecastQuantity(item)" v-for="(item, index) in planData.forecast_quantity_list" :key="index" :class="item == forecastQuantity ? 'active' : ''">
+                {{item}}码榜
                 <transition name="fade">
-                    <span class="line" v-show="item.forecast_quantity == forecastQuantity"></span>
+                    <span class="line" v-show="item == forecastQuantity"></span>
                 </transition>   
             </p>           
         </div>
@@ -40,14 +40,14 @@
                         </p>
                         <p>
                             <span v-if="obj.status == 0">待开</span>
-                            <span v-else v-for="(temp,k) in obj.open_numbers" :key="k"><span style="color: red" v-show="obj.open_number == temp">{{temp}}</span></span>
+                            <span v-else style="color: red">{{obj.open_number}}</span>
                         </p>
                         <p>
                             <span v-if="obj.status == 0">待开</span>
                             <span style="color: green" v-else-if="obj.forecast_numbers.indexOf(obj.open_number) != -1">中</span>
                             <span style="color: red" v-else>挂</span>
                         </p>
-                        <p>{{obj.deadline_win_or_lose}}</p>
+                        <p>{{deadlineWinOrLose(obj.deadline_win_or_lose, 2)}}</p>
                     </li>
                 </ul>
             </div>
@@ -57,7 +57,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { getCurTime } from "@/js/utils";
+import { getCurTime, keepTwoDecimalFull } from "@/js/utils";
 import BScroll from 'better-scroll';
 
 export default {
@@ -66,13 +66,13 @@ export default {
             planData: {},
             expertId: 0,    //专家id
             forecastQuantity: 0, //规则(码)
-            location: 1, //名次
+            location: 0, //名次
         }
     },
     created() {
-        this.expertId = this.$route.query.expertId || 0;
-        this.forecastQuantity = this.$route.query.forecastQuantity || 0;
-        this.location = this.$route.query.location || 1;
+        this.expertId = this.numberPlanParams.expertId;
+        this.location = this.numberPlanParams.location;
+        this.forecastQuantity = this.numberPlanParams.forecastQuantity;
         this.getForecastPlanFunc(
             this.curLotteryCode,
             this.expertId,
@@ -138,9 +138,35 @@ export default {
                 winPro: winPro
             };
         },
+        // 选择名次
+        selectLocation(location) {
+            this.location = location
+            this.getForecastPlanFunc(
+                this.curLotteryCode,
+                this.expertId,
+                getCurTime("YYYY-MM-DD"),
+                this.forecastQuantity,
+                this.location
+            );
+        },
+        // 选择规则(码)
+        selectForecastQuantity(forecastQuantity) {
+            this.forecastQuantity = forecastQuantity
+            this.getForecastPlanFunc(
+                this.curLotteryCode,
+                this.expertId,
+                getCurTime("YYYY-MM-DD"),
+                this.forecastQuantity,
+                this.location
+            );
+        },
+        // 盈利保留两位小数
+        deadlineWinOrLose(data, index) {
+            return keepTwoDecimalFull(data, index)
+        }
     },
     computed: {
-        ...mapGetters(["curLotteryCode"])
+        ...mapGetters(["curLotteryCode", "numberPlanParams"])
     },
     mounted() {
         this.$nextTick(() => {
@@ -152,7 +178,10 @@ export default {
         })
     },
     watch: {
-        curLotteryCode: function() {
+        numberPlanParams() {
+            this.expertId = this.numberPlanParams.expertId;
+            this.location = this.numberPlanParams.location;
+            this.forecastQuantity = this.numberPlanParams.forecastQuantity;
             this.getForecastPlanFunc(
                 this.curLotteryCode,
                 this.expertId,
@@ -161,53 +190,19 @@ export default {
                 this.location
             );
         },
-        '$route.query.expertId': {
-            handler(newVal, oldVal) {
-                this.expertId = newVal
-            },
-            deep: true,
-            immediate: true
-        },
-        expertId() {
-            this.getForecastPlanFunc(
-                this.curLotteryCode,
-                this.expertId,
-                getCurTime("YYYY-MM-DD"),
-                this.forecastQuantity,
-                this.location
-            );
-        },
-        '$route.query.location': {
-            handler(newVal, oldVal) {
-                this.location = newVal
-            },
-            deep: true,
-            immediate: true
-        },
-        location() {
-            this.getForecastPlanFunc(
-                this.curLotteryCode,
-                this.expertId,
-                getCurTime("YYYY-MM-DD"),
-                this.forecastQuantity,
-                this.location
-            );
-        },
-        '$route.query.forecastQuantity': {
-            handler(newVal, oldVal) {
-                this.forecastQuantity = newVal
-            },
-            deep: true,
-            immediate: true
-        },
-        forecastQuantity(){
-            this.getForecastPlanFunc(
-                this.curLotteryCode,
-                this.expertId,
-                getCurTime("YYYY-MM-DD"),
-                this.forecastQuantity,
-                this.location
-            );
+        planData() {
+            // 当 location 为 0 时选中默认第一个
+            if(this.location == 0) {
+                this.location = this.planData.location[0].location
+            }
+            // 当 forecastQuantity 为 0 时选中默认第一个
+            if(this.forecastQuantity == 0) {
+                this.forecastQuantity = this.planData.forecast_quantity_list[0]
+            }
+            // 当 expertId 为 0 时选中默认第一个
+            if(this.expertId == 0) {
+                this.expertId = this.planData.expert_id
+            }
         }
     }
 }
@@ -220,12 +215,12 @@ export default {
             p{
                 height: 100%;line-height: 41px;text-align: center;position: relative;
                 .line{
-                    width: 100%;height: 2px;position: absolute;background: #0072c6;bottom: 0;left: 0;
+                    width: 100%;height: 2px;position: absolute;background: #51a4fb;bottom: 0;left: 0;
                 }
             }
             .location{width: 10%;}
             .forecast-qantity{width: 33.33%;}
-            .active{color:#0072c6}
+            .active{color:#51a4fb}
             .fade-enter-active, .fade-leave-active {
                 transition: opacity .5s
             }

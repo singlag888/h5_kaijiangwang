@@ -2,14 +2,13 @@
 <template>
     <div class="lottery-card">
         <div class="top" v-if="filterData.length != 1">
-            <tab :line-width=2 active-color='#0072c6'>
+            <tab :line-width=2 active-color='#51a4fb'>
                 <tab-item v-for="(item, index) in filterData" :key="index" :selected="curCodeType == item.code_type" @on-item-click="curCodeType = item.code_type">{{item.code_title}}</tab-item>
             </tab>
         </div>
         <div class="box" ref="outerWrapper">
             <ul>
                 <li class="item" v-for="(obj, key) in lotteryCodes" :key="key" v-show="curCodeType == 'hot' ? obj.is_hot == 1 : curCodeType == obj.code_type">
-                    <!-- @click="goToSecondDetail(obj.code, obj.code_type, '/second-detail')" -->
                     <div>
                         <LotteryInfo :result="obj"/>
                     </div>
@@ -18,6 +17,7 @@
                         <p v-show="obj.is_long_dragon == 1" @click="goToSecondDetail(obj.code, obj.code_type, '/second-detail/trend-line')">长龙统计</p>
                         <p v-show="obj.is_sides_total == 1" @click="goToSecondDetail(obj.code, obj.code_type, '/second-detail/two-sided')">双面统计</p>
                         <p v-show="obj.is_forecast_rule == 1" @click="goToSecondDetail(obj.code, obj.code_type, '/second-detail/plan')">专家计划</p>
+                        <p @click="openUrl" class="open">开户投注</p>
                     </div>
                 </li>
             </ul>
@@ -41,7 +41,7 @@ export default {
        }
    },
    computed: {
-       ...mapGetters(["lotteryCodes"]),
+       ...mapGetters(["lotteryCodes", "baseSettingData"]),
         // 过滤相同数据
         filterData() {
             let obj = {};
@@ -69,6 +69,10 @@ export default {
             // 修改彩种的type
             this.chenge_cur_lootery_type(type);
             this.$router.push({path: path})
+       },
+       // 开户投注
+       openUrl() {
+           window.open(this.baseSettingData.open_account_url)
        }
    },
    mounted() {
@@ -89,9 +93,11 @@ export default {
 
 <style scoped lang="scss">
     .lottery-card{
-        width: 100%; max-width: 640px;
+        width: 100%; 
+        // max-width: 640px;
         .top{
-            position: fixed;top: 50px;left: 0;height: 50px;background: #fff;line-height: 50px;width: 100%; max-width: 640px;
+            position: fixed;top: 50px;left: 0;height: 50px;background: #fff;line-height: 50px;width: 100%; 
+            // max-width: 640px;
         }
         .box{
             position: absolute;top: 95px;left: 0;right: 0;bottom: 0;overflow: hidden;
@@ -102,6 +108,7 @@ export default {
                     p{
                         font-size: 12px;padding: 3px 5px;border: 1px solid #eee;border-radius: 5px;margin-right: 5px;color: #777;
                     }
+                    .open{background: #e73f3f; color: #fff;border: none; padding: 3px 6px;}
                 }
             }
         } 

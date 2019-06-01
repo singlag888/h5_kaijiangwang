@@ -7,8 +7,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: () => import ('@/components/lotterydetail/LotteryCard'),
-      
+      component: () => import ('@/components/lotterydetail/LotteryCard')     
     },
     {
       path: '/second-detail',
@@ -46,6 +45,14 @@ export default new Router({
           component: () => import ('@/views/secondDetail/planInfo')
         }
       ]
-    }    
+    },
+    {
+      path: '*',
+      redirect: '/'
+    },
+    {
+      path:'/page408',
+      component: () => import ('@/views/page408')
+    }  
   ]
 })

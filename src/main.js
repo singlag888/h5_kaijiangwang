@@ -22,10 +22,13 @@ new Vue({
     // 获取access token
     store.dispatch('getAccessToken')
     .then(res => {
-      if(res == 404){
-        //this.$router.push('/page404');
-        console.log('404')
-      }
+      // if(res == 404){
+      //   this.$router.push('/page404');
+      //   console.log('404')
+      // }
+      // if(res == 408) {
+      //   this.$router.push('/page408');
+      // }
     });
   },
   computed: {
@@ -44,6 +47,9 @@ new Vue({
       }
       if(result.type == 'max_forecast_plan'){
         store.commit('SOCKET_PLAN_RESULT', result.data)
+      }
+      if(result.type == 'next_open_time') {
+        store.commit('SOCKET_UPDATE_TIME', result.data)
       }
     }
   }

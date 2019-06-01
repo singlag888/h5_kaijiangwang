@@ -67,7 +67,7 @@ export default {
 
     },
     computed: {
-        ...mapGetters(["lotteryData", "cur_lottery_type", "curLotteryCode", "showLoadMore", "noContent"])
+        ...mapGetters(["lotteryData", "cur_lottery_type", "curLotteryCode", "showLoadMore", "noContent", "socketOpenResult"])
     },
     methods: {
         ...mapActions(['getLotteryData']),
@@ -107,6 +107,14 @@ export default {
         })
     },
     watch: {
+        // 开奖后初始化 page
+        socketOpenResult() {       
+            if(this.socketOpenResult.code == this.curLotteryCode){
+                this.page = 1
+                this.scroll.scrollTo(0, 0)
+            }
+        },
+        // code 变化让其跳转到开奖记录，page 初始化
         curLotteryCode() {
             this.activeTab = 'open_numbers'
             this.page = 1
@@ -144,7 +152,7 @@ export default {
                     border-radius: 5px;height: 20px;line-height: 20px;padding: 0 5px;font-size: 12px;color: #666;
                 }
                 .active{
-                    color: #fff;background: red;
+                    color: #fff;background: #51a4fb;
                 }
             }
             .margin{

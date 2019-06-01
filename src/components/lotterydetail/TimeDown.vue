@@ -31,7 +31,7 @@ export default {
     mounted() {
         this.$nextTick(() => {
             this.timeDown();
-        });
+        });       
     },
     methods: {
         formatTime(time) {
@@ -84,6 +84,16 @@ export default {
         isLastQs() {
             if (this.isLastQs <= 0) {
                 this.$emit("callBackFunc", false);
+            }
+        },
+        // 开奖时点击进入详情，返回后不显示开奖
+        curTimeNum() {
+            if(this.curTimeNum <= 0) {
+                this.isOpening = true
+                this.$emit("callBackFunc", this.isOpening);
+            }else {
+                this.isOpening = false
+                this.$emit("callBackFunc", this.isOpening);
             }
         }
     }

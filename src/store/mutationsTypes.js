@@ -33,35 +33,14 @@ export const SOCKET_OPEN_RESULT = 'SOCKET_OPEN_RESULT';
 // websocket計劃
 export const SOCKET_PLAN_RESULT = 'SOCKET_PLAN_RESULT';
 
+// websocket 时间
+export const SOCKET_UPDATE_TIME = 'SOCKET_UPDATE_TIME';
+
 //当前彩种开奖结果
 // export const OPEN_RESULT = 'OPEN_RESULT';
 
 //预测计划-排行榜(首页)
 export const FORECATST_RANKING = 'FORECATST_RANKING';
 
-//预测计划首页
-// export const FORECAST_PLAN_INDEX = 'FORECAST_PLAN_INDEX';
-
-//获取预测计划 -- 概貌
-// export const FORECAST_OVERVIEW = 'FORECAST_OVERVIEW';
-
-//历史开奖title
-// export const HISTORY_TITLE = 'HISTORY_TITLE';
-
-// 文章分类
-// export const ARTICLE_CATEGORY = 'ARTICLE_CATEGORY';
-
-// 广告分组
-// export const AD_LIST = 'AD_LIST';
-
-// 号码名次
-// export const LOCATION_NAMES = 'LOCATION_NAMES';
-
-// 基本趋势-统计
-// export const BASIC_TREND = 'BASIC_TREND';
-
-//当前彩种所有球号
-// export const CUR_LOTTERY_NUMBERS = 'CUR_LOTTERY_NUMBERS';
-
-//大小单双分布
-// export const SCREENING_PARAMETER = 'SCREENING_PARAMETER';
+// 计划参数
+export const NUMBER_PLAN_PARAMS = 'NUMBER_PLAN_PARAMS';

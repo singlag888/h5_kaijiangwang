@@ -64,6 +64,11 @@ const mutations = {
     state.socketPlanResult = obj;
   },
 
+  //websocket 时间
+  [types.SOCKET_UPDATE_TIME](state, obj) {
+    state.socketUpdateTime = obj;
+  },
+
   // 当前彩种开奖结果
   // [types.OPEN_RESULT](state, obj) {
   //   state.openResult = obj;
@@ -74,50 +79,10 @@ const mutations = {
     state.forecastRanking = list;
   },
 
-   // 预测计划首页
-  // [types.FORECAST_PLAN_INDEX](state, list) {
-  //   state.forecastPlanIndex = list;
-  // },
-
-   // 获取预测计划 -- 概貌
-  // [types.FORECAST_OVERVIEW](state, list) {
-  //   state.forecastOverview = list;
-  // },
-
-  // 历史开奖title
-  // [types.HISTORY_TITLE](state, list) {
-  //   state.historyTitle = list;
-  // },
-
-  // 文章分类
-  // [types.ARTICLE_CATEGORY](state, obj) {
-  //   state.articleCategory = obj;
-  // },
-
-  // 广告分组
-  // [types.AD_LIST](state, list) {
-  //   state.adList = list;
-  // },
-
-  // 号码名次
-  // [types.LOCATION_NAMES](state, list) {
-  //   state.locationNames = list;
-  // },
-
-  // 基本趋势-统计
-  // [types.BASIC_TREND](state, list) {
-  //   state.basicTrend = list;
-  // },
-
-  //当前彩种所有球号
-  // [types.CUR_LOTTERY_NUMBERS](state, list) {
-  //   state.curLotteryNumbers = list;
-  // },
-  
-  //大小单双分布
-  // [types.SCREENING_PARAMETER](state, list) {
-  //   state.screeningParameter = list;
-  // }
+  //计划参数
+  [types.NUMBER_PLAN_PARAMS](state, obj) {
+    state.numberPlanParams = obj;
+  }
 };
 
 export default mutations;

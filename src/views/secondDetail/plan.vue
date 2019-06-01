@@ -1,7 +1,7 @@
 <!-- 计划 -->
 <template>
     <div class="plan">
-        <tab :line-width=2 active-color='#0072c6'>
+        <tab :line-width=2 active-color='#51a4fb'>
             <tab-item class="vux-center" :selected="activeTab === item.name" v-for="(item, index) in forecastRanking" @on-item-click="onItemClick(item.name)" :key="index">{{item.name}}码榜</tab-item>
         </tab>
         <div class="container" ref="outerWrapper">
@@ -23,7 +23,7 @@
                             <p>{{item.forecast_quantity}}码</p>
                             <p>{{item.last_sum}}中{{item.result_sum}}</p>
                             <p class="result">{{Math.floor(item.result * 10000) / 100}}%</p>
-                            <p class="profit">{{item.profit}}</p>
+                            <p class="profit">{{Math.round(item.profit)}}</p>
                             <p>查看</p>
                         </li>
                     </ul>
@@ -48,7 +48,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(["curLotteryCode", "forecastRanking"]),
+        ...mapGetters(["curLotteryCode", "forecastRanking"])
     },
     methods: {
         onItemClick(name) {
@@ -60,11 +60,9 @@ export default {
          * location: 名次
          * name: 專家名
          */
-        goPlanInfo(expert_id, forecast_quantity, location) {
-            this.$router.push({
-                path: '/second-detail/planInfo', 
-                query:{'expertId': expert_id, 'forecastQuantity': forecast_quantity, 'location': location}
-            })
+        goPlanInfo(expertId, forecastQuantity, location) {
+            this.$store.commit('NUMBER_PLAN_PARAMS', { expertId, location, forecastQuantity})
+            this.$router.replace({path: '/second-detail/planInfo'})
         }
     },
     mounted() {
@@ -74,17 +72,18 @@ export default {
             }else {
                 this.scroll.refresh()
             }
+            // 判断 this.activeTab 是否为 0 选择第一个
+            if(this.activeTab == 0 && this.forecastRanking.length != 0) {
+                this.activeTab = this.forecastRanking[0].name
+            }
         })
     },
     watch: {
-        'forecastRanking': {
-            handler(newVal, oldVal) {
-                if(this.activeTab == 0) {
-                    this.activeTab = newVal[0].name
-                }
-            },
-            deep: true,
-            immediate: true
+        // 判断 this.activeTab 是否为 0 选择第一个
+        forecastRanking() {
+            if(this.activeTab == 0) {
+                this.activeTab = this.forecastRanking[0].name
+            }
         }
     }
 }

@@ -4,10 +4,11 @@
         <div class="info">
             <div>
                 {{ curReslut.name }}&nbsp;&nbsp;
+                <!-- curReslut.expect -->
                 <span class="color999">{{curReslut.expect}}期</span>
             </div>
             <!-- 时间 -->
-            <TimeDown @callBackFunc="callBackFunc" :isLastQs="curReslut.remaining_expect" :time="curReslut.next_open_seconds"></TimeDown>    
+            <TimeDown @callBackFunc="callBackFunc" :isLastQs="curReslut.remaining_expect" :time="nextOpenSeconds"></TimeDown>    
         </div>
         <!-- number-square -->
         <Number :isOPen="isOPen" :code_type="curReslut.code_type" :result="curReslut.open_numbers"/>
@@ -25,7 +26,8 @@ export default {
     data() {
         return {
             curReslut: this.result,
-            isOPen: false
+            isOPen: false,
+            nextOpenSeconds: this.result.next_open_seconds
         }
     },
     methods: {
@@ -34,19 +36,29 @@ export default {
         },
     },
     computed: {
-        ...mapGetters(['socketOpenResult']),
+        ...mapGetters(['socketOpenResult', 'socketUpdateTime']),
     },
     mounted() {
 
     },
     watch: {
         result:function() {
-            this.curReslut = this.result;           
+            this.curReslut = this.result;         
         },
         socketOpenResult:function() {
             if(this.socketOpenResult.code == this.curReslut.code){
                 this.curReslut = this.socketOpenResult;
             }
+        },
+        socketUpdateTime() {
+            for(let item of this.socketUpdateTime) {
+                if(item.code == this.curReslut.code) {
+                    this.nextOpenSeconds = item.next_open_seconds
+                }
+            }
+        },
+        curReslut() {
+            this.nextOpenSeconds = this.curReslut.next_open_seconds
         }
     }
 }

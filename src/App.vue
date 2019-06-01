@@ -11,7 +11,7 @@
      <!-- 推送 -->
     <div class="push">
       <p class="item" v-for="(item, index) in pushArr" :key="index">
-        {{item.name}}出现【{{item.last_count}}中{{item.result_sum}}】<span class="info" @click="goPlanInfo(item.code, item.code_type, item.expert_id, item.forecast_quantity, item.location)">查看</span> 
+        {{codesName[index]}}出现【{{item.last_count}}中{{item.result_sum}}】<span class="info" @click="goPlanInfo(item.code, item.code_type, item.expert_id, item.forecast_quantity, item.location)">查看</span> 
       </p>
     </div>
   </div>
@@ -27,7 +27,8 @@ export default {
   name: 'App',
   data() {
     return {
-      pushArr: []
+      pushArr: [],
+      codesName: []
     }
   },
   created() {
@@ -35,29 +36,66 @@ export default {
   },
   methods: {
     ...mapActions(["getLotteryCodes", "chengecurLotteryCode", "chenge_cur_lootery_type"]),
-    goPlanInfo(code, type, expert_id, forecast_quantity, location) {
+
+    goPlanInfo(code, type, expertId, forecastQuantity, location) {
       // 修改彩种的code
       this.chengecurLotteryCode(code);
       // 修改彩种的type
       this.chenge_cur_lootery_type(type);
-      this.$router.push({
-        path: '/second-detail/planInfo', 
-        query:{'expertId': expert_id, 'forecastQuantity': forecast_quantity, 'location': location}
-      })
-    }
+      this.$store.commit('NUMBER_PLAN_PARAMS', { expertId, location, forecastQuantity})
+      this.$router.push({path: '/second-detail/planInfo'})
+    },
+
+    // 站点统计
+    // parseDom(arg) {
+    //   var objE = document.createElement("div");
+    //   objE.innerHTML = arg;
+    //   return objE.firstChild;
+    // },
+    // loadScript(dom) {
+    //   var head = document.getElementsByTagName("head")[0];
+    //   var script = document.createElement("script");
+    //   script.type = "text/javascript";
+
+    //   if (dom.src) {
+    //     script.src = dom.src;
+    //     head.appendChild(script);
+    //   } else {
+    //     document.body.appendChild(dom);
+    //   }
+    // }
   },
   computed: {
-    ...mapGetters(['showLoading', 'socketPlanResult'])
+    ...mapGetters(['showLoading', 'socketPlanResult', 'lotteryCodes', 'baseSettingData'])
   },
   mounted() {
     this.getLotteryCodes()
+    // 监听浏览器切换事件,获取最新时间
+    // let _this = this
+    // document.addEventListener('visibilitychange',function() { 
+    //   if(document.visibilityState == 'hidden') { //状态判断
+    //     return 
+    //   }else {
+    //     _this.getLotteryCodes()
+    //   }
+    // });
   },
   watch: {
     socketPlanResult() {
-      this.pushArr.push(this.socketPlanResult)
-      // 推送最多显示三条
-      if(this.pushArr.length > 3) {
-        this.pushArr.shift()
+      for(let item of this.lotteryCodes) {
+        if(item.code == this.socketPlanResult.code) {
+          if(item.is_forecast_rule == 1) {
+            this.codesName.push(item.name)
+            this.pushArr.push(this.socketPlanResult)
+            // 推送最多显示三条
+            if(this.pushArr.length > 3) {
+              this.pushArr.shift()
+            }
+            if(this.codesName.length >3) {
+              this.codesName.shift()
+            }
+          }
+        }
       }
     },
     pushArr() {
@@ -66,7 +104,29 @@ export default {
         if(_this.pushArr.length != 0) {
           _this.pushArr.shift()
         }
+        if(_this.codesName.length != 0) {
+          _this.codesName.shift()
+        }
       },10000)
+    },
+    // "baseSettingData.site_statis"() {
+    //   this.$nextTick(() => {
+    //     if (!this.baseSettingData.site_statis) return;
+    //     var temp = this.baseSettingData.site_statis
+    //       .replace(/&lt;+/g, "<")
+    //       .replace(/&gt;+/g, ">");
+    //     var dom = this.parseDom(temp);
+    //     this.loadScript(dom);
+    //   });
+    // }
+    // 站点统计
+    'baseSettingData.site_statis': {
+      handler(val) {
+        let c = document.createElement('script');
+        c.src = val;
+        let s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(c, s);
+      }
     }
   }
 }
@@ -74,7 +134,7 @@ export default {
 
 <style lang="scss">
     #app {
-      max-width: 640px;
+      // max-width: 640px;
       .main{
         width: 100%; padding-top: 50px;padding-bottom: 10px;
       }
