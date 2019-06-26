@@ -66,7 +66,7 @@ export default {
     // }
   },
   computed: {
-    ...mapGetters(['showLoading', 'socketPlanResult', 'lotteryCodes', 'baseSettingData'])
+    ...mapGetters(['showLoading', 'socketPlanResult', 'lotteryCodes', 'baseSettingBase'])
   },
   mounted() {
     this.getLotteryCodes()
@@ -120,12 +120,14 @@ export default {
     //   });
     // }
     // 站点统计
-    'baseSettingData.site_statis': {
+    'baseSettingBase.site_statis': {
       handler(val) {
-        let c = document.createElement('script');
-        c.src = val;
-        let s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(c, s);
+        setTimeout(() => {
+          let c = document.createElement('script');
+          c.src = val;
+          let s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(c, s);
+        },2000)      
       }
     }
   }

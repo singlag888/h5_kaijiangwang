@@ -35,16 +35,23 @@ export const getSetting = ({
 }) => {
   api.getSetting().then(res => {
     if (res.code == 200) {
-      document.title = res.data.site_title;
-      document.querySelector('#favicon').setAttribute('href',res.data.site_favicon);
-      commit(types.BASE_SETTING_DATA, res.data);
-      if(storage.get('headerImg') == '') {
-        storage.set('headerImg', state.baseSettingData.phone_site_logo)
+      document.title = res.data.base.site_title;
+      document.querySelector('#favicon').setAttribute('href',res.data.base.site_favicon);
+      // base
+      commit(types.BASE_SETTING_BASE, res.data.base);
+      // lottery_data
+      commit(types.BASE_SETTING_LOTTERYDATA, res.data.lottery_data);
+      // sys
+      commit(types.BASE_SETTING_SYS, res.data.sys);
+      // upload
+      commit(types.BASE_SETTING_UPLOAD, res.data.upload);
+      if(storage.get('headerImg') == undefined) {
+        storage.set('headerImg', res.data.base.phone_site_logo)
       }else {
-        if(storage.get('headerImg') == state.baseSettingData.phone_site_logo) {
+        if(storage.get('headerImg') == res.data.base.phone_site_logo) {
           return
         } else {
-          storage.set('headerImg', state.baseSettingData.phone_site_logo)
+          storage.set('headerImg', res.data.base.phone_site_logo)
         }
       }
     } else {
@@ -61,6 +68,10 @@ export const getLotteryCodes = ({
   return api.getLotteryCodes(params).then((res) => {
     if (res.code == 200) {
       commit(types.LOTTERY_CODES, res.data);
+      if(storage.get('H5_CUR_LOTTERY_CODE') == undefined || storage.get('H5_CUR_LOTTERY_TYPE') == undefined) {
+        commit('CUR_LOTTERY_CODE', res.data[0].code);
+        commit('CUR_LOTTERY_TYPE', res.data[0].code_type);
+      }
       //console.log(res)
     } else {
       //console.log(res)

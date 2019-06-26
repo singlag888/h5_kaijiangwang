@@ -2,11 +2,13 @@
 <template>
     <div class="two-sided" ref="outerWrapper">
         <div>
-            <ul v-for="(thData, index) in sidesTotal && filterData(sidesTotal)" :key="index">
-                <li class="title">{{thData.location_name}}</li>
-                <li class="item" v-for="(item, key) in sidesTotal" v-show="thData.location == item.location" :key="key">
-                    <p>{{item.result}}</p>
-                    <p>{{item.count}}</p>
+            <ul v-for="(thData, index) in locationName" :key="index">
+                <li class="title">{{thData}}</li>
+                <li class="item">
+                    <p v-for="(obj, key) in sidesTotalField" :key="key">{{obj}}</p>
+                </li>
+                <li class="item" >
+                    <p v-for="(obj,key) in sidesTotal" :key="key" v-show="key >= (sidesTotalField.length * index) && key < (sidesTotalField.length * (index+1))">{{obj}}</p>
                 </li>
             </ul>
         </div>
@@ -19,30 +21,47 @@ import BScroll from 'better-scroll';
 
 export default {
     computed: {
-        ...mapGetters(["sidesTotal"])
+        ...mapGetters(["sidesTotal", "lotteryCodes", "curLotteryCode"]),
+
+        // 当前彩种的 location_name
+        locationName() {
+            for(let item of this.lotteryCodes) {
+                if(item.code == this.curLotteryCode) {
+                    return item.lottery_location_names
+                }
+            }
+        },
+        // 当前彩种双面数据
+        sidesTotalField() {
+            for(let item of this.lotteryCodes) {
+                if(item.code == this.curLotteryCode) {
+                    return item.sides_total_field
+                }
+            }
+        },
     },
     methods: {
         // 转换数据过滤相同数据
-        filterData(list) {
-            let data = list;
-            let obj = {};
-            let arr = data && data.reduce(function(item, next) {
-                obj[next.location] ? "" : (obj[next.location] = true && item.push(next));
-                return item;
-            }, []);
+        // filterData(list) {
+        //     let data = list;
+        //     let obj = {};
+        //     let arr = data && data.reduce(function(item, next) {
+        //         obj[next.location] ? "" : (obj[next.location] = true && item.push(next));
+        //         return item;
+        //     }, []);
 
-            arr && arr.forEach(temp => {
-                let len = 0;
-                data && data.forEach(item => {
-                    if (temp.location == item.location) {
-                        len++;
-                    }
-                });
-                this.$set(temp, "len", len);
-            });
-            // console.log(arr)
-            return arr;
-        },
+        //     arr && arr.forEach(temp => {
+        //         let len = 0;
+        //         data && data.forEach(item => {
+        //             if (temp.location == item.location) {
+        //                 len++;
+        //             }
+        //         });
+        //         this.$set(temp, "len", len);
+        //     });
+        //     // console.log(arr)
+        //     return arr;
+        // },
     },
     mounted() {
         this.$nextTick(() => {
@@ -65,18 +84,17 @@ export default {
                 border-right: none
             }
         }
+        ul:last-child{
+                border-bottom: none
+            }
         .title{
             height: 28px;line-height: 28px;color: #fff;font-size: 13px;text-align: center;background: #9da9c2;
         }
         .item{
-            border-right: 1px solid #e6e6e6;background: #fff;width: 25%;box-sizing: border-box;display: inline-block;//text-align: center;background: #fff;//border-bottom: 1px solid #e6e6e6;
+            display: flex;justify-content: space-between;border-bottom: 1px solid #e6e6e6;
             p{
-                text-align: center;height: 28px;line-height: 28px;color: #666;font-size: 13px;//border-right: 1px solid #e6e6e6;
+                flex: 1;text-align: center;height: 28px;line-height: 28px;color: #666;font-size: 13px;border-right: 1px solid #e6e6e6;
             }
-            p:first-child{
-                border-bottom: 1px solid #e6e6e6;
-            }
-        }
-        
+        }        
     }
 </style>

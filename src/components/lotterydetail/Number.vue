@@ -78,7 +78,7 @@ export default {
 
 <style lang="scss" scoped>
     .square{
-        color: #fff;
+        color: #fff;line-height: 26px;font-size: 14px;
         p{
             display: inline-block;margin-right: 5px;text-align: center;width: 24px;height: 24px;line-height: 24px;//border-radius: 5px;
         }

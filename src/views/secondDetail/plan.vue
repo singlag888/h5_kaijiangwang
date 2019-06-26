@@ -92,8 +92,7 @@ export default {
 <style lang="scss" scoped>
     .plan{
         .container{
-            // padding-top: 44px;
-            overflow: hidden;position:absolute;top: 200px;bottom: 10px;left: 0;right: 0;
+            overflow: hidden;position:absolute;top: 204px;bottom: 10px;left: 0;right: 0;
             li{
                 width: 100%;height: 41px;font-size: 13px;color: #777;box-sizing: border-box;border-bottom: 1px solid #f1f1f1;display: flex;align-items: center;
                 P{text-align: center;}

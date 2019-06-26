@@ -1,3 +1,5 @@
+import storage from "good-storage";
+
 //loading
 export const showLoading =state=> state.showLoading;
 export const showLoadMore =state=> state.showLoadMore;
@@ -7,16 +9,31 @@ export const noContent =state=> state.noContent;
 export const showDrawerTba =state=> state.showDrawerTba;
 
 // 基础配置数据
-export const baseSettingData =state=> state.baseSettingData;
+export const baseSettingBase =state=> state.baseSettingBase;
+export const baseSettingLotteryData =state=> state.baseSettingLotteryData;
+export const baseSettingSys =state=> state.baseSettingSys;
+export const baseSettingUpload =state=> state.baseSettingUpload;
 
 // 彩种编码
 export const lotteryCodes =state=> state.lotteryCodes;
 
 // 当前彩种code
-export const curLotteryCode =state=> state.curLotteryCode;
+export const curLotteryCode =state=> {
+    if(state.curLotteryCode == '') {
+        return storage.get('H5_CUR_LOTTERY_CODE')
+    }else {
+        return state.curLotteryCode
+    }
+}
 
 // 当前彩种类型
-export const cur_lottery_type =state=> state.cur_lottery_type;
+export const cur_lottery_type =state=> {
+    if(state.cur_lottery_type == '') {
+        return storage.get('H5_CUR_LOTTERY_TYPE')
+    }else {
+        return state.cur_lottery_type
+    }
+}
 
 // 基础数据
 export const lotteryData =state=> state.lotteryData;

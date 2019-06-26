@@ -67,15 +67,25 @@ export default {
                 page: this.page,
                 code: this.curLotteryCode
             })
-            // 长龙
-            this.getLongDragon({ code: this.curLotteryCode });
-            // 双面统计
-            this.getSidesTotal({
-                open_date: formatTime(this.curSelectTime, "YYYY-MM-DD"),
-                code: this.curLotteryCode
-            });
-            //预测计划-排行榜(首页)
-            this.getForecastRanking({code: this.curLotteryCode});
+            for(let item of this.lotteryCodes) {
+                if(item.code == this.curLotteryCode) {
+                    // 长龙
+                    if(item.is_long_dragon == 1) {
+                        this.getLongDragon({ code: this.curLotteryCode });
+                    }
+                    // 双面统计
+                    if(item.is_sides_total == 1) {
+                        this.getSidesTotal({
+                            open_date: formatTime(this.curSelectTime, "YYYY-MM-DD"),
+                            code: this.curLotteryCode
+                        });
+                    }
+                    //预测计划-排行榜(首页)
+                    if(item.is_forecast_rule == 1) {
+                        this.getForecastRanking({code: this.curLotteryCode});
+                    }
+                }
+            }          
         },
         goTo(code, type) {
             this.$store.commit('SHOW_DRAWER_TAB', false)
@@ -104,6 +114,9 @@ export default {
         }
     },
     watch: {
+        lotteryCodes() {
+            this.unifyAjax()
+        },
         socketOpenResult:function() {       
             if(this.socketOpenResult.code == this.curLotteryCode){
                 this.$store.commit('NO_CONTENT', false)
@@ -127,7 +140,6 @@ export default {
         if( this.path == '/second-detail/planInfo') {
             this.path = '/second-detail/plan'
         }
-        this.unifyAjax()
     }
 }
 </script>

@@ -30,17 +30,17 @@ export default {
        }
    },
    computed: {
-       ...mapGetters(['baseSettingData']),
+       ...mapGetters(['baseSettingBase']),
 
         showDrawerTba() {
             return this.$store.state.showDrawerTba
         },
 
         imgUrl() {
-            if(storage.get('headerImg')) {
-                return storage.get('headerImg')
+            if(storage.get('headerImg') == undefined) {
+                return this.baseSettingBase.phone_site_logo
             }else {
-                this.baseSettingData.phone_site_logo
+                return storage.get('headerImg')
             }
         }
    },

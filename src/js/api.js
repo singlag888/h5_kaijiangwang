@@ -30,6 +30,7 @@ export function getLotteryData(params) {
         page_size: params.page_size || 30,
         page: params.page || 1,
         code: params.code,
+        is_phone: 1
     });
     return axios.get(urls.getLotteryDataAPI(), param);
 }

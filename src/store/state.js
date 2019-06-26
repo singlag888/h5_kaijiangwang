@@ -6,13 +6,16 @@ const state = {
     // 二级页面下拉显示
     showDrawerTba: false,
     // 基础配置数据
-    baseSettingData: {},
+    baseSettingBase: {},
+    baseSettingLotteryData: {},
+    baseSettingSys: {},
+    baseSettingUpload: {},
      // 彩种编码
     lotteryCodes: [],
     // 当前彩种code
-    curLotteryCode: 'bjpk10',
+    curLotteryCode: '',
     // 当前彩种类型
-    cur_lottery_type: 'pk10',
+    cur_lottery_type: '',
     // 基础数据
     lotteryData: [],
     //长龙数据

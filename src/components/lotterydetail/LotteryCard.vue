@@ -17,7 +17,7 @@
                         <p v-show="obj.is_long_dragon == 1" @click="goToSecondDetail(obj.code, obj.code_type, '/second-detail/trend-line')">长龙统计</p>
                         <p v-show="obj.is_sides_total == 1" @click="goToSecondDetail(obj.code, obj.code_type, '/second-detail/two-sided')">双面统计</p>
                         <p v-show="obj.is_forecast_rule == 1" @click="goToSecondDetail(obj.code, obj.code_type, '/second-detail/plan')">专家计划</p>
-                        <p @click="openUrl" class="open">开户投注</p>
+                        <a :href="url" class="open">开户投注</a>
                     </div>
                 </li>
             </ul>
@@ -41,7 +41,7 @@ export default {
        }
    },
    computed: {
-       ...mapGetters(["lotteryCodes", "baseSettingData"]),
+       ...mapGetters(["lotteryCodes", "baseSettingLotteryData"]),
         // 过滤相同数据
         filterData() {
             let obj = {};
@@ -53,6 +53,9 @@ export default {
                 }, []);
                 arr.unshift({code_title:'热门',code_type:'hot'})
                 return arr
+        },
+        url() {
+            return this.baseSettingLotteryData.open_account_url
         }
    },
    methods: {
@@ -69,10 +72,6 @@ export default {
             // 修改彩种的type
             this.chenge_cur_lootery_type(type);
             this.$router.push({path: path})
-       },
-       // 开户投注
-       openUrl() {
-           window.open(this.baseSettingData.open_account_url)
        }
    },
    mounted() {
@@ -108,7 +107,7 @@ export default {
                     p{
                         font-size: 12px;padding: 3px 5px;border: 1px solid #eee;border-radius: 5px;margin-right: 5px;color: #777;
                     }
-                    .open{background: #e73f3f; color: #fff;border: none; padding: 3px 6px;}
+                    .open{background: #e73f3f; color: #fff;border: none; padding: 3px 6px;font-size: 12px;border-radius: 5px;}
                 }
             }
         } 

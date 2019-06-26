@@ -2,10 +2,9 @@
 <template>
     <div class="lottery-info">
         <div class="info">
-            <div>
-                {{ curReslut.name }}&nbsp;&nbsp;
-                <!-- curReslut.expect -->
-                <span class="color999">{{curReslut.expect}}期</span>
+            <div>               
+                {{ codeName }}&nbsp;&nbsp;
+                <span class="color999">{{curReslut.expect}} 期</span>
             </div>
             <!-- 时间 -->
             <TimeDown @callBackFunc="callBackFunc" :isLastQs="curReslut.remaining_expect" :time="nextOpenSeconds"></TimeDown>    
@@ -36,7 +35,15 @@ export default {
         },
     },
     computed: {
-        ...mapGetters(['socketOpenResult', 'socketUpdateTime']),
+        ...mapGetters(['socketOpenResult', 'socketUpdateTime', 'lotteryCodes']),
+        // 单独显示彩种名称
+        codeName() {
+            for(let item of this.lotteryCodes) {
+                if(item.code == this.curReslut.code) {
+                    return item.name
+                }
+            }
+        }
     },
     mounted() {
 
@@ -68,8 +75,8 @@ export default {
     .lottery-info{
         background: #fff;padding: 6px 10px;
         .info{
-            display: flex; justify-content: space-between; font-size: 12px; color: #666;margin-bottom: 10px;
+            display: flex; justify-content: space-between; font-size: 13px; color: #666;margin-bottom: 10px;
         }     
-        .color999{color: #999;}
+        .color999{color: #999;font-size: 12px;}
     }
 </style>

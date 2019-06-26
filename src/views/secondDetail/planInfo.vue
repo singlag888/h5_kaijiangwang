@@ -2,12 +2,12 @@
 <template>
     <div class="plan-info">
         <div class="tab">
-            <p class="location" @click="selectLocation(item.location)" v-for="(item, index) in planData.location" :key="index" :class="item.location == location ? 'active' : ''">
-                {{item.location_name.length == '3' ? item.location_name.slice(1, 2) : item.location_name.slice(0, 1)}}
+            <p class="location" @click="selectLocation(index+1)" v-for="(item, index) in locationName" :key="index" :class="index+1 == location ? 'active' : ''">
+                {{item.length == '3' ? item.slice(1, 2) : item.slice(0, 1)}}
                 <transition name="fade">
-                    <span class="line" v-show="item.location == location"></span>
+                    <span class="line" v-show="index+1 == location"></span>
                 </transition>   
-            </p>           
+            </p>
         </div>
         <div class="tab">
             <p class="forecast-qantity" @click="selectForecastQuantity(item)" v-for="(item, index) in planData.forecast_quantity_list" :key="index" :class="item == forecastQuantity ? 'active' : ''">
@@ -166,7 +166,14 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(["curLotteryCode", "numberPlanParams"])
+        ...mapGetters(["curLotteryCode", "numberPlanParams", "lotteryCodes"]),
+        locationName() {
+            for(let item of this.lotteryCodes) {
+                if(item.code == this.curLotteryCode) {
+                    return item.lottery_location_names
+                }
+            }
+        }
     },
     mounted() {
         this.$nextTick(() => {

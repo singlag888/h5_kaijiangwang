@@ -1,4 +1,5 @@
 import * as types from './mutationsTypes'
+import storage from "good-storage";
 
 const mutations = {
 
@@ -18,9 +19,18 @@ const mutations = {
     state.showDrawerTba = data;
   },
 
-  //基础配置数据
-  [types.BASE_SETTING_DATA](state, obj) {
-    state.baseSettingData = obj;
+   // 基础配置数据
+   [types.BASE_SETTING_BASE](state, obj) {
+    state.baseSettingBase = obj;
+  },
+  [types.BASE_SETTING_LOTTERYDATA](state, obj) {
+    state.baseSettingLotteryData = obj;
+  },
+  [types.BASE_SETTING_SYS](state, obj) {
+    state.baseSettingSys = obj;
+  },
+  [types.BASE_SETTING_UPLOAD](state, obj) {
+    state.baseSettingUpload = obj;
   },
 
   // 彩种编码
@@ -31,17 +41,18 @@ const mutations = {
   // 当前彩种code
   [types.CUR_LOTTERY_CODE](state, code) {
     state.curLotteryCode = code;
+    storage.set('H5_CUR_LOTTERY_CODE', code)
   },
 
    // 当前彩种类型
   [types.CUR_LOTTERY_TYPE](state, type) {
     state.cur_lottery_type = type;
+    storage.set('H5_CUR_LOTTERY_TYPE', type)
   },
 
   // 基础数据
   [types.LOTTERY_DATA](state, list) {
     state.lotteryData = list
-    // console.log(state.lotteryData)
   },
 
     //长龙数据
